@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/taipei-main/station-0.1.schema.json",
+  "title": "台北車站靜態路網0.1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "station",
+    "levels",
+    "nodes",
+    "edges",
+    "facilities",
+    "observations",
+    "issues",
+    "modelling_rules",
+    "coordinates",
+    "coverage"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1.0"
+    },
+    "levels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "order",
+          "elevation_m"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "G",
+              "B1",
+              "B2",
+              "B3",
+              "B4"
+            ]
+          },
+          "order": {
+            "type": "integer"
+          },
+          "elevation_m": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "level_id",
+          "zone_id",
+          "type",
+          "paid_area",
+          "position",
+          "source"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "level_id": {
+            "enum": [
+              "G",
+              "B1",
+              "B2",
+              "B3",
+              "B4"
+            ]
+          },
+          "paid_area": {
+            "enum": [
+              "paid",
+              "unpaid",
+              "unknown"
+            ]
+          },
+          "position": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "required": [
+                  "image_px",
+                  "uv",
+                  "local_schematic"
+                ],
+                "properties": {
+                  "uv": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "from_node",
+          "to_node",
+          "mode",
+          "direction",
+          "facility_id",
+          "status",
+          "routing_enabled",
+          "geometry",
+          "distance_m",
+          "duration_s"
+        ],
+        "properties": {
+          "direction": {
+            "const": "both"
+          },
+          "mode": {
+            "enum": [
+              "walk",
+              "stairs",
+              "escalator",
+              "elevator",
+              "fare_gate"
+            ]
+          },
+          "status": {
+            "enum": [
+              "traced",
+              "diagram_supported",
+              "inferred"
+            ]
+          },
+          "distance_m": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "duration_s": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "routing_enabled": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "facilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "served_levels",
+          "landing_nodes",
+          "direction",
+          "status"
+        ],
+        "properties": {
+          "type": {
+            "enum": [
+              "stairs",
+              "escalator",
+              "elevator"
+            ]
+          },
+          "direction": {
+            "const": "both"
+          }
+        }
+      }
+    },
+    "observations": {
+      "type": "array"
+    },
+    "issues": {
+      "type": "array"
+    }
+  }
+}

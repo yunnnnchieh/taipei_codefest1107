@@ -1,0 +1,8 @@
+.DS_Store
+.env
+.env.*
+.openai/
+*.pem
+*.key
+*.p12
+*.zip

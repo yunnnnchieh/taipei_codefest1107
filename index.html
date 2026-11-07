@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#edf8fa">
+<title>台北車站 3D 導覽</title>
+<link rel="stylesheet" href="style.css">
+<script type="module" src="app.mjs"></script>
+</head>
+<body>
+<header class="mast">
+  <div class="brand">
+    <span aria-hidden="true" class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 18h4a3 3 0 0 0 3-3V9a3 3 0 0 1 3-3h4"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="6" r="2"/></svg></span>
+    <span>站內導覽</span>
+  </div>
+  <span class="badge">AR 試走</span>
+</header>
+<main>
+  <section class="intro">
+    <p class="eyebrow" lang="en">TAIPEI MAIN STATION</p>
+    <h1>台北車站立體導覽</h1>
+    <p>選擇你所在的地標與目的地，查看通道、樓層轉換和出口。</p>
+  </section>
+  <div class="layout">
+    <section class="card plan" aria-labelledby="plan-title">
+      <p class="eyebrow">01　路線設定</p><h2 id="plan-title">選擇起點與目的地</h2>
+      <div class="field"><label for="start">目前位置</label><select id="start"></select></div>
+      <div class="field"><label for="end">目的地</label><select id="end"></select></div>
+      <div class="map-pick"><button type="button" class="secondary" id="pick-start" aria-pressed="false">在圖上選起點</button><button type="button" class="secondary" id="pick-end" aria-pressed="false">在圖上選目的地</button></div>
+      <button type="button" id="open-ar" class="open-ar" disabled>開啟 AR 地面引導</button>
+      <details><summary>路線條件</summary><label class="check"><input id="strict" type="checkbox"> 排除推定路段</label><label class="check"><input id="lift" type="checkbox"> 避開樓梯與手扶梯</label></details>
+    </section>
+    <section class="card map-card" aria-labelledby="map-title">
+      <div class="map-heading"><div><p class="eyebrow">02　樓層地圖</p><h2 id="map-title">立體路線圖</h2></div><button id="view" class="secondary" type="button" aria-pressed="false">俯視</button></div>
+      <div id="floors" class="floors" aria-label="顯示樓層"></div>
+      <div class="viewport">
+        <canvas id="scene" aria-label="立體車站平面圖。可以用起點與目的地選單操作。"></canvas>
+        <span id="map-hint" class="map-hint">拖曳旋轉地圖</span>
+        <div class="zoom" aria-label="地圖縮放"><button type="button" id="zoom-in" aria-label="放大">＋</button><button type="button" id="zoom-out" aria-label="縮小">−</button></div>
+      </div>
+      <div class="map-footer"><span><i class="legend dot"></i>目前位置</span><span><i class="legend line"></i>規劃路線</span><span><i class="legend dash"></i>推定路段</span></div>
+    </section>
+    <section class="card guide" aria-labelledby="guide-title">
+      <p class="eyebrow">03　步行指引</p><h2 id="guide-title">逐段引導</h2>
+      <p id="status" role="status" aria-live="polite">正在載入站內路網…</p>
+      <div id="current" class="current" hidden></div>
+      <div class="progress" id="progress" hidden><button type="button" class="secondary" id="back">上一個地標</button><button type="button" id="next">已到下一個地標</button></div>
+      <details id="all-steps" hidden><summary>查看所有路段</summary><ol id="steps"></ol></details>
+    </section>
+  </div>
+  <footer>資料來源為你提供的《台北車站靜態路網 v0.1》。樓層疊圖與地面出口位置為示意。AR 紅點依步伐估算，抵達後請手動確認。路網尚未標定實際距離或樓層高度。</footer>
+</main>
+<dialog id="ar" aria-labelledby="ar-title">
+  <video data-ar="video" autoplay muted playsinline></video>
+  <canvas data-ar="ground" aria-hidden="true" hidden></canvas>
+  <div class="ar-top">
+    <div><h2 id="ar-title">AR 地面引導</h2><span>步伐估算 · 地標確認</span></div>
+    <button type="button" data-ar="close" autofocus>關閉</button>
+  </div>
+  <div class="ar-minimap"><span data-ar="floor"></span><canvas id="ar-map" aria-label="目前樓層的小地圖，紅點顯示依步伐估算的位置"></canvas></div>
+  <div class="ar-direction" data-ar="direction" hidden></div>
+  <div class="ar-bottom">
+    <p class="ar-location">最後確認 · <span data-ar="here"></span></p>
+    <strong data-ar="instruction"></strong>
+    <p class="ar-detail" data-ar="detail"></p>
+    <p class="ar-hint" data-ar="hint" role="status"></p>
+    <p class="ar-progress" data-ar="progress"></p>
+    <div class="ar-controls">
+      <button type="button" data-ar="retry" hidden>重新開啟相機</button>
+      <button type="button" class="secondary" data-ar="calibrate" hidden>開始步伐引導</button>
+      <button type="button" class="secondary quiet" data-ar="step" hidden>補一步</button>
+      <button type="button" data-ar="next">到了 · 下一個地標</button>
+    </div>
+  </div>
+</dialog>
+</body>
+</html>
